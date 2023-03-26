@@ -1,0 +1,108 @@
+TOP FOCUS KEYWORDS DOWNLOAD
+----------------------------
+// Get all the <span> elements inside the container with class name "top_tags"
+const topTags = document.querySelectorAll('.top_tags span');
+
+// Extract the text content of each <span> element and split into two columns: text and numbers
+const csvData = Array.from(topTags)
+  .map(tag => {
+    const text = tag.textContent.trim();
+    const textWithoutParentheses = text.replace(/[()]/g, '').trim();
+    const num = textWithoutParentheses.match(/\d+/);
+    const textWithoutNum = textWithoutParentheses.replace(/\d+/, '').trim();
+    return `${textWithoutNum},${num || ''}`;
+  })
+  .join('\n');
+
+// Create a new Blob object with the CSV data
+const blob = new Blob([csvData], { type: 'text/csv' });
+
+// Create a new anchor element to download the file
+const downloadLink = document.createElement('a');
+downloadLink.href = URL.createObjectURL(blob);
+downloadLink.download = 'Top Focus Keywords.csv';
+
+// Trigger the download by clicking the anchor element
+downloadLink.click();
+
+
+ALL TAGS IN TABLE FORM DOWNLOAD
+--------------------------------
+
+const h3Data = [];
+document.querySelectorAll('h3').forEach((element) => {
+  const spanData = [];
+  element.querySelectorAll('span').forEach((span) => {
+    spanData.push(span.textContent.trim());
+  });
+  h3Data.push(spanData);
+});
+
+// Download the CSV file
+const encodedUri = encodeURI(csvContent);
+const link = document.createElement("a");
+link.setAttribute("href", encodedUri);
+link.setAttribute("download", "Tags in Table form.csv");
+document.body.appendChild(link);
+link.click();
+
+
+DOWNLOAD ALL TITLES OF FIRST PAGE GIGS
+---------------------------------------
+const h3Data = [];
+document.querySelectorAll('h3').forEach((element) => {
+  const text = element.textContent.trim();
+  h3Data.push(text);
+});
+
+const csvContent = "data:text/csv;charset=utf-8," + h3Data.map(e => e.replace(/,/g, '')).join("\n");
+const encodedUri = encodeURI(csvContent);
+const link = document.createElement("a");
+link.setAttribute("href", encodedUri);
+link.setAttribute("download", "Titles.csv");
+document.body.appendChild(link);
+link.click();
+
+
+DOWNLOAD ALL TAGS OF FIRST PAGE GIGS
+---------------------------------------
+
+// Get all the h3 elements on the page
+const h3Elements = document.querySelectorAll('h3');
+
+// Create an array to store the span elements
+const spanElements = [];
+
+// Loop through each h3 element
+h3Elements.forEach((h3Element) => {
+  // Get all the span elements inside the h3 element
+  const spans = h3Element.querySelectorAll('span');
+  
+  // Loop through each span element and add it to the array
+  spans.forEach((span) => {
+    spanElements.push(span.textContent);
+  });
+});
+
+// Create a CSV string with the text content of the span elements
+const csvString = spanElements.join('\n');
+
+// Convert the CSV string to a Blob object
+const blob = new Blob([csvString], { type: 'text/csv' });
+
+// Create a URL for the Blob object
+const url = URL.createObjectURL(blob);
+
+// Create a link element to download the CSV file
+const link = document.createElement('a');
+link.setAttribute('href', url);
+link.setAttribute('download', 'Tags.csv');
+link.style.display = 'none';
+
+// Append the link to the body and click it to download the CSV file
+document.body.appendChild(link);
+link.click();
+
+// Remove the link from the body and revoke the URL to free up memory
+document.body.removeChild(link);
+URL.revokeObjectURL(url);
