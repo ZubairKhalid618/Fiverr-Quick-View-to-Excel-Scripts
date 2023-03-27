@@ -50,9 +50,12 @@ link.click();
 DOWNLOAD ALL TITLES OF FIRST PAGE GIGS
 ---------------------------------------
 const h3Data = [];
-document.querySelectorAll('h3').forEach((element) => {
-  const text = element.textContent.trim();
-  h3Data.push(text);
+document.querySelectorAll('h3').forEach(h3 => {
+  const a = h3.querySelector('a');
+  if (a) {
+		const text = a.textContent;
+  		h3Data.push(text);
+  }
 });
 
 const csvContent = "data:text/csv;charset=utf-8," + h3Data.map(e => e.replace(/,/g, '')).join("\n");
