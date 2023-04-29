@@ -1,10 +1,8 @@
-TOP FOCUS KEYWORDS DOWNLOAD|
-----------------------------
 // Get all the <span> elements inside the container with class name "top_tags"
 const topTags = document.getElementById('Topkeywords').querySelectorAll('span');
 
 // Extract the text content of each <span> element and split into two columns: text and numbers
-const csvData = Array.from(topTags)
+const topTagsData = Array.from(topTags)
   .map(tag => {
     const text = tag.textContent.trim();
     const textWithoutParentheses = text.replace(/[()]/g, '').trim();
@@ -14,45 +12,23 @@ const csvData = Array.from(topTags)
   })
   .join('\n');
 
-// Create a new Blob object with the CSV data
-const blob = new Blob([csvData], { type: 'text/csv' });
+// Download All Titles of First Page Gigs
 
-// Create a new anchor element to download the file
-const downloadLink = document.createElement('a');
-downloadLink.href = URL.createObjectURL(blob);
-downloadLink.download = 'Top Focus Keywords.csv';
-
-// Trigger the download by clicking the anchor element
-downloadLink.click();
-
-
-
-
-DOWNLOAD ALL TITLES OF FIRST PAGE GIGS|
----------------------------------------
 const h3Data = [];
 document.querySelectorAll('h3').forEach(h3 => {
   const a = h3.querySelector('a');
   if (a) {
-		const text = a.textContent;
-  		h3Data.push(text);
+    const text = a.textContent;
+    h3Data.push(text);
   }
 });
 
-const csvContent = "data:text/csv;charset=utf-8," + h3Data.map(e => e.replace(/,/g, '')).join("\n");
-const encodedUri = encodeURI(csvContent);
-const link = document.createElement("a");
-link.setAttribute("href", encodedUri);
-link.setAttribute("download", "Titles.csv");
-document.body.appendChild(link);
-link.click();
+const titlesData = h3Data.map(e => e.replace(/,/g, '')).join("\n");
 
-
-DOWNLOAD ALL TAGS OF FIRST PAGE GIGS|
----------------------------------------
+// Download All Tags of First Page Gigs
 
 var gigCards = document.getElementsByClassName('gig-card-layout');
-var textDataList = [];
+var tagsDataList = [];
 
 for (var i = 0; i < gigCards.length; i++) {
   var innerDivs = gigCards[i].getElementsByTagName('div');
@@ -68,21 +44,24 @@ for (var i = 0; i < gigCards.length; i++) {
         }
       }
       var textData = spanTextList.join('\n');
-      textDataList.push(textData);
+      tagsDataList.push(textData);
     }
   }
 }
 
-var textData = textDataList.join('\n');
+const tagsData = tagsDataList.join('\n');
+
+// Combine all data into a single CSV file
+
+const csvData = `Top Focus Keywords\n${topTagsData}\n\nTitles\n${titlesData}\n\nTags Used by Sellers\n${tagsData}`;
 
 // Create a new Blob object with the CSV data
-const blob = new Blob([textData], { type: 'text/csv' });
+const blob = new Blob([csvData], { type: 'text/csv' });
 
 // Create a new anchor element to download the file
 const downloadLink = document.createElement('a');
 downloadLink.href = URL.createObjectURL(blob);
-downloadLink.download = 'TAGS_USED_BY_SELLERS.csv';
+downloadLink.download = 'FQV.csv';
 
 // Trigger the download by clicking the anchor element
 downloadLink.click();
-
